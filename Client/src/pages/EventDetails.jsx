@@ -121,7 +121,7 @@ function EventDetails() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-24">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
         <p>Loading event details...</p>
@@ -130,7 +130,7 @@ function EventDetails() {
   );
 
   if (error) return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center p-24">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center ">
       <div className="text-center">
         <div className="text-red-500 text-6xl mb-4">⚠️</div>
         <p className="text-red-500 text-xl mb-4">Error: {error}</p>
@@ -197,8 +197,8 @@ function EventDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 pt-24">
-      <div className="max-w-7xl mx-auto pt-20">
+    <div className="min-h-screen bg-black text-white p-6 ">
+      <div className="max-w-7xl mx-auto pt-12">
         <div className="bg-zinc-900 rounded-xl p-6 shadow-lg mb-6">
           <h1 className="text-3xl font-bold mb-4">{event.question}</h1>
           <p className="text-gray-400 mb-6">{event.description}</p>
