@@ -6,12 +6,7 @@ import mongoose from 'mongoose';
 initScheduler();
 
 // After creating your HTTP server
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true
-  }
-});
+
 
 // Make io globally available
 global.io = io;
