@@ -103,7 +103,7 @@ function Auth({setIsOpen, onSuccess}) {
     try {
       await axios.post('https://opinio-backend-pyno.onrender.com/auth/forgot-password', {
         username
-      });
+      }, { withCredentials: true });
       
       toast.dismiss(loadingToastId);
       toast.success('If your account exists, you will receive an email with reset instructions.');

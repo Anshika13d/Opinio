@@ -35,7 +35,7 @@ function ResetPassword() {
     try {
       await axios.post(`https://opinio-backend-pyno.onrender.com/auth/reset-password/${token}`, {
         newPassword
-      });
+      }, { withCredentials: true });
       
       toast.success('Password reset successfully!');
       setResetComplete(true);
