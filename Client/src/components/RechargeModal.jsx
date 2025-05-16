@@ -1,0 +1,134 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import YouTube from 'react-youtube';
+
+export default function RechargeModal({ onClose, onRechargeComplete }) {
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [canClose, setCanClose] = useState(false);
+  const [rewardClaimed, setRewardClaimed] = useState(false);
+
+  useEffect(() => {
+    let timer;
+    if (!videoEnded && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            setCanClose(true);
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [videoEnded, timeLeft]);
+
+  const handleReward = async () => {
+    if (rewardClaimed) return;
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        'http://localhost:4001/auth/recharge',
+        {},
+        { withCredentials: true }
+      );
+      setRewardClaimed(true);
+      onRechargeComplete(response.data.newBalance);
+      setTimeout(() => onClose(), 2000); // Auto close after showing success message
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to recharge balance');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setVideoEnded(true);
+    setCanClose(true);
+    handleReward();
+  };
+
+  const handleClose = () => {
+    if (canClose) {
+      if (!rewardClaimed) {
+        handleReward();
+      } else {
+        onClose();
+      }
+    }
+  };
+
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      disablekb: 1,
+      fs: 0,
+      modestbranding: 1,
+      rel: 0
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+      <div className="bg-zinc-900 p-6 rounded-xl max-w-3xl w-full mx-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-white">Watch to Earn ₹10</h2>
+          {canClose && (
+            <button
+              onClick={handleClose}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {error && (
+          <div className="bg-red-500/20 text-red-200 p-3 rounded-lg mb-4">
+            {error}
+          </div>
+        )}
+
+        <div className="relative">
+          <YouTube
+            videoId="FuXNumBwDOM"
+            opts={opts}
+            onEnd={handleVideoEnd}
+            className="w-full aspect-video rounded-lg overflow-hidden"
+          />
+          {!canClose && (
+            <div className="absolute top-4 right-4 bg-black/80 text-white px-3 py-1 rounded-full">
+              {timeLeft}s
+            </div>
+          )}
+        </div>
+
+        <div className="mt-4 text-center text-gray-300">
+          {!canClose ? (
+            <p>Watch for {timeLeft} seconds to earn ₹10. Please don't close this window.</p>
+          ) : loading ? (
+            <p>Processing your reward...</p>
+          ) : rewardClaimed ? (
+            <p className="text-green-500">Video completed! You earned ₹10!</p>
+          ) : (
+            <div>
+              <p className="text-green-500 mb-2">Time's up! You can now claim your reward.</p>
+              <button
+                onClick={handleReward}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200"
+              >
+                Claim ₹10 Reward
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+} 
