@@ -1,7 +1,8 @@
 import { io } from 'socket.io-client';
+import { SOCKET_URL } from '../config';
 
 // Create a singleton socket instance
-const socket = io('http://localhost:4001', {
+const socket = io(SOCKET_URL, {
   withCredentials: true,
   autoConnect: true
 });

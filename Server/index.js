@@ -13,7 +13,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = 4001;
+const port = process.env.PORT || 4001;
 
 // Create HTTP server
 const server = http.createServer(app);
