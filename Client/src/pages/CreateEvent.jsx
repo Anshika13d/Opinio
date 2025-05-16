@@ -24,7 +24,7 @@ function CreateEvent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4001/events', formData);
+      const response = await axios.post('https://opinio-backend-pyno.onrender.com/events', formData);
       if (response.data) {
         toast.success('Event created successfully');
         navigate('/events'); // Navigate to home page or events list

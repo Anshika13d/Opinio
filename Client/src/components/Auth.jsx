@@ -32,12 +32,12 @@ function Auth({setIsOpen, onSuccess}) {
     e.preventDefault();
 
     try{
-      const res = await axios.post('http://localhost:4001/auth/login', {
+      const res = await axios.post('https://opinio-backend-pyno.onrender.com/auth/login', {
         username,
         password
       }, { withCredentials: true });
 
-      const resData = await axios.get("http://localhost:4001/auth/me", { withCredentials: true });
+      const resData = await axios.get("https://opinio-backend-pyno.onrender.com/auth/me", { withCredentials: true });
       setUser(resData.data);
       
       toast.success('Welcome back!! Login successful 🎉');
@@ -63,7 +63,7 @@ function Auth({setIsOpen, onSuccess}) {
     }
 
     try {
-      const signupRes = await axios.post('http://localhost:4001/auth/signup', {
+      const signupRes = await axios.post('https://opinio-backend-pyno.onrender.com/auth/signup', {
         username,
         email,
         password
@@ -101,7 +101,7 @@ function Auth({setIsOpen, onSuccess}) {
     }
     
     try {
-      await axios.post('http://localhost:4001/auth/forgot-password', {
+      await axios.post('https://opinio-backend-pyno.onrender.com/auth/forgot-password', {
         username
       });
       

@@ -25,7 +25,7 @@ function Contact() {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:4001/contact', formData);
+      await axios.post('https://opinio-backend-pyno.onrender.com/contact', formData);
       toast.success('Message sent successfully!');
       setFormData({
         name: '',

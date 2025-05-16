@@ -33,7 +33,7 @@ function ResetPassword() {
     }
 
     try {
-      await axios.post(`http://localhost:4001/auth/reset-password/${token}`, {
+      await axios.post(`https://opinio-backend-pyno.onrender.com/auth/reset-password/${token}`, {
         newPassword
       });
       

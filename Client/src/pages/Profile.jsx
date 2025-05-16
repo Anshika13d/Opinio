@@ -33,14 +33,14 @@ function Profile() {
     const fetchUserData = async () => {
       try {
         // Fetch user profile
-        const userResponse = await axios.get('http://localhost:4001/auth/me', {
+        const userResponse = await axios.get('https://opinio-backend-pyno.onrender.com/auth/me', {
           withCredentials: true
         });
         setUser(userResponse.data);
         setPasswordForm(prev => ({ ...prev, username: userResponse.data.username }));
         
         // Fetch user's created events
-        const eventsResponse = await axios.get('http://localhost:4001/events', {
+        const eventsResponse = await axios.get('https://opinio-backend-pyno.onrender.com/events', {
           withCredentials: true
         });
         const userEvents = eventsResponse.data.filter(
@@ -49,7 +49,7 @@ function Profile() {
         setUserEvents(userEvents);
 
         // Fetch user's voted events
-        const votedEventsResponse = await axios.get('http://localhost:4001/events/user/voted', {
+        const votedEventsResponse = await axios.get('https://opinio-backend-pyno.onrender.com/events/user/voted', {
           withCredentials: true
         });
         // Filter out any null events (they might have been deleted)
@@ -79,7 +79,7 @@ function Profile() {
     socket.on('balanceUpdated', async () => {
       // Refresh user data when any balance update occurs
       try {
-        const response = await axios.get('http://localhost:4001/auth/me', {
+        const response = await axios.get('https://opinio-backend-pyno.onrender.com/auth/me', {
           withCredentials: true
         });
         setUser(response.data);
@@ -96,7 +96,7 @@ function Profile() {
 
   const handleDeleteEvent = async (eventId) => {
     try {
-      await axios.delete(`http://localhost:4001/events/${eventId}`, {
+      await axios.delete(`https://opinio-backend-pyno.onrender.com/events/${eventId}`, {
         withCredentials: true
       });
       
@@ -141,7 +141,7 @@ function Profile() {
 
     try {
       // First request a password reset token
-      await axios.post('http://localhost:4001/auth/forgot-password', {
+      await axios.post('https://opinio-backend-pyno.onrender.com/auth/forgot-password', {
         username: passwordForm.username
       });
 
@@ -179,7 +179,7 @@ function Profile() {
   const handleVoteUpdateComplete = async (data) => {
     try {
       // Refresh voted events list
-      const votedEventsResponse = await axios.get('http://localhost:4001/events/user/voted', {
+      const votedEventsResponse = await axios.get('https://opinio-backend-pyno.onrender.com/events/user/voted', {
         withCredentials: true
       });
       // Filter out any null events (they might have been deleted)
