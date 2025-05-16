@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AlertTriangle, ChevronRight } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import { useAuth } from '../context/authContext';
 import toast from 'react-hot-toast';
 import RechargeModal from './RechargeModal';
@@ -27,23 +27,19 @@ export default function Voting({ eventId, question, initialYesPrice = 3.0, initi
   const {user} = useAuth();
   // Update balance based on user context
   useEffect(() => {
-  const fetchBalance = async () => {
-    try {
-      const response = await axios.get('http://localhost:4001/auth/me', {
-        withCredentials: true
-      });
-      setBalance(response.data.balance);
-    } catch (err) {
-      console.error("Failed to fetch balance:", err);
+    const fetchBalance = async () => {
+      try {
+        const response = await api.get('/auth/me');
+        setBalance(response.data.balance);
+      } catch (err) {
+        console.error("Failed to fetch balance:", err);
+      }
+    };
+
+    if (user) {
+      fetchBalance();
     }
-  };
-
-  if (user) {
-    fetchBalance();
-  }
-}, [user]);
-
-
+  }, [user]);
 
   // Handle quantity increase/decrease
   const decreaseQuantity = () => {
@@ -72,14 +68,11 @@ export default function Voting({ eventId, question, initialYesPrice = 3.0, initi
     setError(null);
   
     try {
-      const response = await axios.patch(`http://localhost:4001/events/${eventId}/vote`,  
-        {
-          vote: selectedOption,
-          quantity: quantity,
-          isUpdate: isUpdate
-        },
-        { withCredentials: true }
-      );
+      const response = await api.patch(`/events/${eventId}/vote`, {
+        vote: selectedOption,
+        quantity: quantity,
+        isUpdate: isUpdate
+      });
   
       const data = response.data;
   
@@ -93,9 +86,7 @@ export default function Voting({ eventId, question, initialYesPrice = 3.0, initi
   
       // Show success state briefly
       setSuccess(true);
-      const updatedUser = await axios.get('http://localhost:4001/auth/me', {
-        withCredentials: true
-      });
+      const updatedUser = await api.get('/auth/me');
       setBalance(updatedUser.data.balance);
       setTimeout(() => setSuccess(false), 2000);
   
@@ -135,9 +126,7 @@ export default function Voting({ eventId, question, initialYesPrice = 3.0, initi
     // For now, let's fetch the latest event data when component mounts
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(`http://localhost:4001/events/${eventId}`,
-          { withCredentials: true }
-        );
+        const response = await api.get(`/events/${eventId}`);
         if (response.ok) {
           const eventData = await response.json();
           setYesPrice(eventData.yes);

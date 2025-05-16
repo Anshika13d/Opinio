@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import YouTube from 'react-youtube';
 
 export default function RechargeModal({ onClose, onRechargeComplete }) {
@@ -30,11 +30,7 @@ export default function RechargeModal({ onClose, onRechargeComplete }) {
     
     setLoading(true);
     try {
-      const response = await axios.post(
-        'http://localhost:4001/auth/recharge',
-        {},
-        { withCredentials: true }
-      );
+      const response = await api.post('/auth/recharge');
       setRewardClaimed(true);
       onRechargeComplete(response.data.newBalance);
       setTimeout(() => onClose(), 2000); // Auto close after showing success message

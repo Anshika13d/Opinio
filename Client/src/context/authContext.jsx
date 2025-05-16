@@ -1,9 +1,7 @@
 // AuthContext.js
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
-
-axios.defaults.withCredentials = true; // Ensure cookies are sent
+import api from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -18,9 +16,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:4001/auth/me', {
-          withCredentials: true
-        });
+        const response = await api.get('/auth/me');
         setUser(response.data);
       } catch (err) {
         setUser(null);
@@ -34,7 +30,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("http://localhost:4001/auth/logout");
+      await api.post("/auth/logout");
       setUser(null);
       toast.success("Logged out successfully");
     } catch (err) {

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EventCard from '../components/EventCard';
 import Voting from '../components/Voting';
-import io from 'socket.io-client';
-import axios from 'axios';
+import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/authContext';
 import toast from 'react-hot-toast';
@@ -26,9 +25,7 @@ export default function EventsList({selectedCategory}) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('http://localhost:4001/events', {
-          withCredentials: true
-        });
+        const response = await api.get('/events');
         // Only show active events
         const activeEvents = response.data.filter(event => event.status === 'active');
         setEvents(activeEvents);

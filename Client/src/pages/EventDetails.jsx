@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { format, formatDistanceToNow } from 'date-fns';
 import { motion } from 'framer-motion';
 import {
@@ -50,13 +50,7 @@ function EventDetails() {
         setLoading(true);
         console.log('Fetching event details for ID:', eventId);
         
-        const response = await axios.get(`http://localhost:4001/events/${eventId}`, {
-          withCredentials: true,
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await api.get(`/events/${eventId}`);
 
         console.log('Raw API Response:', response.data);
 
