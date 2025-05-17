@@ -196,13 +196,13 @@ function EventDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 ">
-      <div className="max-w-7xl mx-auto pt-12">
-        <div className="bg-zinc-900 rounded-xl p-6 shadow-lg mb-6">
-          <h1 className="text-3xl font-bold mb-4">{event.question}</h1>
+    <div className="min-h-screen bg-black text-white p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto pt-8 sm:pt-12">
+        <div className="bg-zinc-900 rounded-xl p-4 sm:p-6 shadow-lg mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4">{event.question}</h1>
           <p className="text-gray-400 mb-6">{event.description}</p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
             {/* Current Prices */}
             <div className="bg-zinc-800 p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-2">Current Prices</h3>
@@ -248,62 +248,80 @@ function EventDetails() {
           </div>
 
           {/* Charts Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* Price History Chart */}
             <div className="bg-zinc-800 p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-4">Price History</h3>
-              {priceHistory.length > 0 ? (
-                <Line
-                  data={priceChartData}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        position: 'top',
-                        labels: {
-                          color: 'white'
-                        }
-                      }
-                    },
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        grid: {
-                          color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        ticks: {
-                          color: 'white'
+              <div className="w-full h-[300px] sm:h-[400px]">
+                {priceHistory.length > 0 ? (
+                  <Line
+                    data={priceChartData}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: 'top',
+                          labels: {
+                            color: 'white',
+                            font: {
+                              size: 12
+                            }
+                          }
                         }
                       },
-                      x: {
-                        grid: {
-                          color: 'rgba(255, 255, 255, 0.1)'
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                          },
+                          ticks: {
+                            color: 'white',
+                            font: {
+                              size: 11
+                            }
+                          }
                         },
-                        ticks: {
-                          color: 'white'
+                        x: {
+                          grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                          },
+                          ticks: {
+                            color: 'white',
+                            font: {
+                              size: 11
+                            },
+                            maxRotation: 45,
+                            minRotation: 45
+                          }
                         }
                       }
-                    }
-                  }}
-                />
-              ) : (
-                <p className="text-center text-gray-400">No price history available yet</p>
-              )}
+                    }}
+                  />
+                ) : (
+                  <p className="text-center text-gray-400">No price history available yet</p>
+                )}
+              </div>
             </div>
 
             {/* Vote Distribution Chart */}
             <div className="bg-zinc-800 p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-4">Vote Distribution</h3>
-              <div className="w-80 h-80 mx-auto ">
+              <div className="w-full aspect-square max-w-[400px] mx-auto">
                 <Pie
                   data={votingDistributionData}
                   options={{
                     responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                       legend: {
                         position: 'top',
                         labels: {
-                          color: 'white'
+                          color: 'white',
+                          font: {
+                            size: 12
+                          }
                         }
                       }
                     }
@@ -315,16 +333,16 @@ function EventDetails() {
 
           {/* Voting Buttons */}
           {event.status === 'active' && (
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => handleVote('yes')}
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors w-full sm:w-auto"
               >
                 Vote Yes
               </button>
               <button
                 onClick={() => handleVote('no')}
-                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
+                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors w-full sm:w-auto"
               >
                 Vote No
               </button>
@@ -343,9 +361,9 @@ function EventDetails() {
             stiffness: 260,
             damping: 20,
           }}
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
         >
-          <div className="bg-zinc-900 p-6 rounded-xl relative w-[90%] max-w-md">
+          <div className="bg-zinc-900 p-4 sm:p-6 rounded-xl relative w-full max-w-md">
             <button
               className="absolute top-2 right-2 text-gray-400 hover:text-white"
               onClick={() => {
