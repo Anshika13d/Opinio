@@ -88,7 +88,6 @@ export default function Voting({ eventId, question, initialYesPrice = 3.0, initi
       setSuccess(true);
       const updatedUser = await api.get('/auth/me');
       setBalance(updatedUser.data.balance);
-      setTimeout(() => setSuccess(false), 2000);
   
       if (onVoteComplete) {
         onVoteComplete(data);

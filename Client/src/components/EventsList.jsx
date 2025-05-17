@@ -161,14 +161,14 @@ export default function EventsList({selectedCategory}) {
           exit={{ opacity: 0, scale: 0.95 }}
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4"
         >
-          <div className="bg-zinc-900 rounded-xl p-6 w-full max-w-md relative">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md relative">
             <button
               onClick={() => {
                 setShowVoting(false);
                 setSelectedEvent(null);
                 setActiveEventId(null);
               }}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-white"
+              className="absolute top-4 right-4 text-zinc-400 hover:text-black"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
