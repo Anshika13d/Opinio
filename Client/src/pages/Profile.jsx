@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Voting from '../components/Voting';
 import RechargeModal from '../components/RechargeModal';
 import socket from '../utils/socket';
+import { toast } from 'react-hot-toast';
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -121,49 +122,19 @@ function Profile() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     
-    // Validate passwords match
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      setPasswordChangeStatus({
-        message: 'New passwords do not match',
-        type: 'error'
-      });
-      return;
-    }
-
-    // Validate password length
-    if (passwordForm.newPassword.length < 6) {
-      setPasswordChangeStatus({
-        message: 'Password must be at least 6 characters long',
-        type: 'error'
-      });
-      return;
-    }
-
     try {
-      // First request a password reset token
-      await axios.post('https://opinio-backend-pyno.onrender.com/auth/forgot-password', {
-        username: passwordForm.username
+      // Request a password reset token using the user's username
+      const response = await axios.post('https://opinio-backend-pyno.onrender.com/auth/forgot-password', {
+        username: user.username
       });
 
-      setPasswordChangeStatus({
-        message: 'Password reset email has been sent to your email address',
-        type: 'success'
-      });
-
-      // Clear the form and close the modal
-      setPasswordForm(prev => ({
-        ...prev,
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      }));
+      toast.success('Password reset email has been sent to your email address');
+      
+      // Close the modal
       setIsChangingPassword(false);
-
+      
     } catch (err) {
-      setPasswordChangeStatus({
-        message: err.response?.data?.message || 'Failed to change password',
-        type: 'error'
-      });
+      toast.error(err.response?.data?.message || 'Failed to initiate password reset');
     }
   };
 
@@ -176,14 +147,20 @@ function Profile() {
     setShowVoting(true);
   };
 
-  const handleVoteUpdateComplete = (data) => {
-    // Update the event in the votedEvents list
-    setVotedEvents(prevEvents =>
-      prevEvents.map(event =>
-        event._id === data.event._id ? data.event : event
-      )
-    );
-    // Removed automatic closing of modal
+  const handleVoteUpdateComplete = async (data) => {
+    try {
+      // Refresh voted events list
+      const votedEventsResponse = await axios.get('https://opinio-backend-pyno.onrender.com/events/user/voted', {
+        withCredentials: true
+      });
+      // Filter out any null events (they might have been deleted)
+      const validVotedEvents = votedEventsResponse.data.filter(event => event !== null);
+      setVotedEvents(validVotedEvents);
+      setShowVoting(false);
+      setSelectedEvent(null);
+    } catch (err) {
+      console.error('Error refreshing voted events:', err);
+    }
   };
 
   const handleRechargeComplete = (newBalance) => {
@@ -393,62 +370,24 @@ function Profile() {
             <div className="bg-zinc-900 rounded-lg p-6 w-full max-w-md">
               <h2 className="text-2xl font-bold mb-4">Change Password</h2>
               
-              {passwordChangeStatus.message && (
-                <div className={`p-3 rounded-lg mb-4 ${
-                  passwordChangeStatus.type === 'error' ? 'bg-red-500/20 text-red-200' : 'bg-green-500/20 text-green-200'
-                }`}>
-                  {passwordChangeStatus.message}
-                </div>
-              )}
+              <div className="text-gray-300 mb-6">
+                Click the button below to receive a password reset link in your email.
+              </div>
 
-              <form onSubmit={handlePasswordChange} className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">New Password</label>
-                  <input
-                    type="password"
-                    value={passwordForm.newPassword}
-                    onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-                    className="w-full bg-zinc-800 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Confirm New Password</label>
-                  <input
-                    type="password"
-                    value={passwordForm.confirmPassword}
-                    onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    className="w-full bg-zinc-800 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div className="flex gap-3 mt-6">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition duration-200"
-                  >
-                    Change Password
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsChangingPassword(false);
-                      setPasswordChangeStatus({ message: '', type: '' });
-                      setPasswordForm(prev => ({
-                        ...prev,
-                        currentPassword: '',
-                        newPassword: '',
-                        confirmPassword: ''
-                      }));
-                    }}
-                    className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white py-2 rounded-lg transition duration-200"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+              <div className="flex gap-3">
+                <button
+                  onClick={handlePasswordChange}
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition duration-200"
+                >
+                  Send Reset Link
+                </button>
+                <button
+                  onClick={() => setIsChangingPassword(false)}
+                  className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white py-2 rounded-lg transition duration-200"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         )}

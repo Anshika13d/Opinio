@@ -129,7 +129,7 @@ function CreateEvent() {
 
           <button
             type="submit"
-            className="w-full bg-zinc-950 text-white py-2 px-4 rounded-md hover:bg-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-gray-500"
           >
             Create Event
           </button>

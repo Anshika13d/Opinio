@@ -28,8 +28,10 @@ function Auth({setIsOpen, onSuccess}) {
     }
   }, [user, setIsOpen, onSuccess]);
 
+
   const handleLogin = async (e) =>{
     e.preventDefault();
+    const loadingToastId = toast.loading('Just a moment... 😁');
 
     try{
       const res = await axios.post('https://opinio-backend-pyno.onrender.com/auth/login', {
@@ -39,8 +41,9 @@ function Auth({setIsOpen, onSuccess}) {
 
       const resData = await axios.get("https://opinio-backend-pyno.onrender.com/auth/me", { withCredentials: true });
       setUser(resData.data);
-      
-      toast.success('Welcome back!! Login successful 🎉');
+
+      toast.dismiss(loadingToastId);
+      toast.success('Welcome back!! 🎉');
 
       setIsOpen(false);
       if (onSuccess) onSuccess();
@@ -48,6 +51,7 @@ function Auth({setIsOpen, onSuccess}) {
       navigate('/');
     }catch(err){
       console.error('Login error:', err.response?.data?.message || err.message);
+      toast.dismiss(loadingToastId);
       toast.error('Login failed: Please check your credentials.');
     }
   }
@@ -72,7 +76,7 @@ function Auth({setIsOpen, onSuccess}) {
       // Set user data directly from the signup response
       setUser(signupRes.data.user);
       
-      toast.success('Signup successful! Welcome to Opiniofied! 🎉');
+      toast.success('Welcome to Opinio! 🎉');
       toast.dismiss(loadingToastId);
       setIsOpen(false);
       if (onSuccess) onSuccess();

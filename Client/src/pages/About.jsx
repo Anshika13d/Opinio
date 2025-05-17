@@ -19,24 +19,55 @@ function About() {
 
         {/* How it Works Section */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">How it works</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+          <h2 className="text-3xl font-bold mb-8 text-center">How it Works</h2>
+          <div className="grid gap-6">
             <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
               <div className="flex items-center mb-4">
-                <span className="text-2xl mr-3">🔮</span>
-                <h3 className="text-xl font-semibold">Predict with Purpose</h3>
+                <span className="text-2xl mr-3">1️⃣</span>
+                <h3 className="text-xl font-semibold">Sign Up & Get Started</h3>
               </div>
               <p className="text-gray-400">
-                Cast your vote by choosing YES or NO on live events based on your understanding, logic, or gut feeling.
+                Create your account and receive ₹10 as a welcome bonus. Watch short videos daily to earn additional ₹10, helping you build your prediction balance.
               </p>
             </div>
+
             <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
               <div className="flex items-center mb-4">
-                <span className="text-2xl mr-3">💸</span>
-                <h3 className="text-xl font-semibold">Earn for Accuracy</h3>
+                <span className="text-2xl mr-3">2️⃣</span>
+                <h3 className="text-xl font-semibold">Choose Your Events</h3>
               </div>
               <p className="text-gray-400">
-                The more accurate your opinions, the more rewards you unlock. It's simple — the smarter your prediction, the greater your earnings.
+                Browse through various categories of events - from sports matches to current affairs. Each event has a simple YES or NO prediction option with dynamic pricing based on community sentiment.
+              </p>
+            </div>
+
+            <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+              <div className="flex items-center mb-4">
+                <span className="text-2xl mr-3">3️⃣</span>
+                <h3 className="text-xl font-semibold">Place Your Predictions</h3>
+              </div>
+              <p className="text-gray-400">
+                Select your prediction (YES/NO) and choose your quantity. The cost varies based on current odds - lower odds mean higher probability but lower returns. Each correct prediction earns you ₹10 per quantity!
+              </p>
+            </div>
+
+            <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+              <div className="flex items-center mb-4">
+                <span className="text-2xl mr-3">4️⃣</span>
+                <h3 className="text-xl font-semibold">Earn Daily Rewards</h3>
+              </div>
+              <p className="text-gray-400">
+                Keep your balance growing by watching short videos in the Recharge section. Each completed video adds ₹10 to your balance, which you can use for more predictions. It's a simple way to earn daily!
+              </p>
+            </div>
+
+            <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+              <div className="flex items-center mb-4">
+                <span className="text-2xl mr-3">5️⃣</span>
+                <h3 className="text-xl font-semibold">Track & Win</h3>
+              </div>
+              <p className="text-gray-400">
+                Monitor your predictions in real-time through detailed charts and statistics. When events conclude, correct predictions are automatically rewarded. Check your profile to see your winning streak and total earnings!
               </p>
             </div>
           </div>
@@ -79,10 +110,10 @@ function About() {
         {/* Call to Action */}
         <div className="text-center bg-gradient-to-br from-zinc-900/50 to-gray-900/50 p-8 rounded-2xl border border-purple-800/50">
           <p className="text-xl text-gray-200 mb-6">
-            Don't just scroll through opinions — create your own impact.
+            Ready to turn your predictions into rewards?
           </p>
           <p className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-gray-500 bg-clip-text text-transparent">
-            Join Opinio today, make your voice count, and turn your insight into influence.
+            Join Opinio today, make your voice count, and start earning from your insights!
           </p>
         </div>
       </div>
