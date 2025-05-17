@@ -28,7 +28,7 @@ function Navbar() {
           <h1 className="text-pretty font-semibold text-xl">OPINIO</h1>
 
           {/* Desktop Menu */}
-          <ul className="hidden lg:flex flex-grow justify-center space-x-10 text-center">
+          <ul className="hidden lg:flex   space-x-10 text-right justify-between">
             <Link to='/'><li className="hover:text-gray-400 cursor-pointer">Home</li></Link>
             <Link to='/about'><li className="hover:text-gray-400 cursor-pointer">About</li></Link>
             <Link to='/events'><li className="hover:text-gray-400 cursor-pointer">Events</li></Link>
