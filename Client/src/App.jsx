@@ -12,12 +12,14 @@ import Profile from './pages/Profile'
 import EventDetails from './pages/EventDetails'
 import Footer from './components/Footer'
 import Layout from './components/Layout'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
 
   return (
     <>
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
