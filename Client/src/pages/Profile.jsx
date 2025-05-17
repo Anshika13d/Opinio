@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaUser, FaEnvelope, FaWallet, FaClock, FaCalendar, FaChevronDown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Voting from '../components/Voting';
 import RechargeModal from '../components/RechargeModal';
@@ -21,6 +21,8 @@ function Profile() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showRechargeModal, setShowRechargeModal] = useState(false);
   const navigate = useNavigate();
+  const [showCreatedEvents, setShowCreatedEvents] = useState(true);
+  const [showVotedEvents, setShowVotedEvents] = useState(true);
 
   // Add state for password change form
   const [passwordForm, setPasswordForm] = useState({
@@ -172,42 +174,57 @@ function Profile() {
   if (!user) return <div className="text-center p-8 text-white">Please log in to view your profile</div>;
 
   return (
-    <div className="min-h-screen pb-16 text-white pt-12">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen pb-16 text-white pt-12 ">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* User Info Section */}
-        <div className="bg-zinc-900 rounded-xl p-6 shadow-lg mb-8">
-          <h1 className="text-3xl font-bold mb-6">Profile</h1>
+        <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-8 shadow-xl mb-8 border border-zinc-700/30 backdrop-blur-sm">
+          <h1 className="text-4xl font-bold mb-8 bg-white to-purple-500 bg-clip-text text-transparent">Profile Dashboard</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <div>
-                <label className="text-gray-400 text-sm">Username</label>
-                <div className="text-xl font-semibold">{user.username}</div>
-              </div>
-
-              <div>
-                <label className="text-gray-400 text-sm">Email</label>
-                <div className="text-xl">{user.email}</div>
-              </div>
-
-              <div>
-                <label className="text-gray-400 text-sm">Balance</label>
-                <div className="text-xl font-semibold text-green-500">₹{user.balance?.toFixed(2) || '0.00'}</div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="text-gray-400 text-sm">Last Login</label>
-                <div className="text-lg">
-                  {format(new Date(user.lastLogin), 'PPpp')}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 p-4 bg-zinc-800/50 rounded-xl">
+                <FaUser className="text-2xl text-blue-500" />
+                <div>
+                  <label className="text-gray-400 text-sm">Username</label>
+                  <div className="text-xl font-semibold">{user.username}</div>
                 </div>
               </div>
 
-              <div>
-                <label className="text-gray-400 text-sm">Member Since</label>
-                <div className="text-lg">
-                  {format(new Date(user.createdAt), 'PPP')}
+              <div className="flex items-center space-x-4 p-4 bg-zinc-800/50 rounded-xl">
+                <FaEnvelope className="text-2xl text-purple-500" />
+                <div>
+                  <label className="text-gray-400 text-sm">Email</label>
+                  <div className="text-xl">{user.email}</div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 p-4 bg-zinc-800/50 rounded-xl">
+                <FaWallet className="text-2xl text-green-500" />
+                <div>
+                  <label className="text-gray-400 text-sm">Balance</label>
+                  <div className="text-xl font-semibold text-green-500">₹{user.balance?.toFixed(2) || '0.00'}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center space-x-4 p-4 bg-zinc-800/50 rounded-xl">
+                <FaClock className="text-2xl text-orange-500" />
+                <div>
+                  <label className="text-gray-400 text-sm">Last Login</label>
+                  <div className="text-lg">
+                    {format(new Date(user.lastLogin), 'PPpp')}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4 p-4 bg-zinc-800/50 rounded-xl">
+                <FaCalendar className="text-2xl text-pink-500" />
+                <div>
+                  <label className="text-gray-400 text-sm">Member Since</label>
+                  <div className="text-lg">
+                    {format(new Date(user.createdAt), 'PPP')}
+                  </div>
                 </div>
               </div>
             </div>
@@ -215,148 +232,189 @@ function Profile() {
         </div>
 
         {/* Created Events Section */}
-        <div className="bg-zinc-900 rounded-xl p-6 shadow-lg mb-8">
-          <h2 className="text-2xl font-bold mb-4">My Created Events</h2>
+        <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-8 shadow-xl mb-8 border border-zinc-700/30">
+          <div className="flex justify-between items-center mb-6">
+            <button className="text-3xl font-bold bg-white bg-clip-text text-transparent"
+            onClick={() => setShowCreatedEvents(!showCreatedEvents)}
+            >
+              My Created Events
+            </button>
+            <button
+              onClick={() => setShowCreatedEvents(!showCreatedEvents)}
+              className="p-2 hover:bg-zinc-700/50 rounded-full transition-colors"
+            >
+              <FaChevronDown
+                className={`w-5 h-5 text-gray-400 transform transition-transform duration-300 ${
+                  showCreatedEvents ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+          </div>
           
-          {eventDeleteStatus.message && (
-            <div className={`p-3 rounded-lg mb-4 ${
-              eventDeleteStatus.type === 'error' ? 'bg-red-500/20 text-red-200' : 'bg-green-500/20 text-green-200'
-            }`}>
-              {eventDeleteStatus.message}
-            </div>
-          )}
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            showCreatedEvents ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}>
+            {eventDeleteStatus.message && (
+              <div className={`p-4 rounded-xl mb-6 ${
+                eventDeleteStatus.type === 'error' ? 'bg-red-500/20 text-red-200' : 'bg-green-500/20 text-green-200'
+              }`}>
+                {eventDeleteStatus.message}
+              </div>
+            )}
 
-          {userEvents.length === 0 ? (
-            <p className="text-gray-400">You haven't created any events yet.</p>
-          ) : (
-            <div className="grid gap-4">
-              {userEvents.map(event => (
-                <div 
-                  key={event._id} 
-                  className="bg-zinc-800 rounded-lg p-4 cursor-pointer hover:bg-zinc-700 transition-colors"
-                  onClick={() => handleEventClick(event._id)}
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">{event.question}</h3>
-                      <p className="text-gray-400 text-sm mb-2">{event.description}</p>
-                      <div className="flex gap-4 text-sm text-gray-400">
-                        <span>Yes Votes: {event.yesVotes}</span>
-                        <span>No Votes: {event.noVotes}</span>
-                        <span>Created: {format(new Date(event.createdAt), 'PP')}</span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteEvent(event._id);
-                      }}
-                      className="text-red-500 hover:text-red-400 transition-colors p-2"
-                      title="Delete Event"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Voted Events Section */}
-        <div className="bg-zinc-900 rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">My Voted Events</h2>
-          
-          {votedEvents.length === 0 ? (
-            <p className="text-gray-400">You haven't voted on any events yet.</p>
-          ) : (
-            <div className="grid gap-4">
-              {votedEvents.map(event => {
-                // Calculate if user won (only for ended events)
-                const hasEnded = event.status === 'ended';
-                const userVotedYes = event.userVote.vote === 'yes';
-                const yesWon = event.outcome === 'yes';
-                const hasWon = hasEnded && ((userVotedYes && yesWon) || (!userVotedYes && !yesWon));
-                
-                return (
+            {userEvents.length === 0 ? (
+              <div className="text-center py-8 bg-zinc-800/50 rounded-xl">
+                <p className="text-gray-400 text-lg">You haven't created any events yet.</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {userEvents.map(event => (
                   <div 
                     key={event._id} 
-                    className={`bg-zinc-800 rounded-lg p-4 hover:bg-zinc-700 transition-colors ${
-                      hasEnded ? (hasWon ? 'border-2 border-green-500' : 'border-2 border-red-500') : ''
-                    }`}
+                    className="bg-zinc-800/50 rounded-xl p-6 cursor-pointer hover:bg-zinc-700/50 transition-all duration-300 transform hover:scale-[1.02] border border-zinc-700/30"
+                    onClick={() => handleEventClick(event._id)}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold mb-2">{event.question}</h3>
-                        <p className="text-gray-400 text-sm mb-2">{event.description}</p>
-                        <div className="flex flex-wrap gap-4 text-sm">
-                          <span className={event.userVote.vote === 'yes' ? 'text-green-500' : 'text-red-500'}>
-                            Voted: {event.userVote.vote.toUpperCase()}
-                          </span>
-                          <span className="text-gray-400">
-                            Quantity: {event.userVote.quantity}
-                          </span>
-                          <span className="text-gray-400">
-                            Voted on: {format(new Date(event.userVote.timestamp), 'PP')}
-                          </span>
-                          <span className="text-gray-400">
-                            Created by: {event.createdBy?.username || 'Anonymous'}
-                          </span>
-                          {/* Add status badges */}
-                          {hasEnded ? (
-                            <span className={`font-semibold ${hasWon ? 'text-green-500' : 'text-red-500'}`}>
-                              {hasWon ? '🎉 Won!' : '😔 Lost'}
-                            </span>
-                          ) : (
-                            <span className="text-yellow-500 font-semibold">
-                              🕒 In Progress
-                            </span>
-                          )}
+                        <h3 className="text-xl font-semibold mb-3">{event.question}</h3>
+                        <p className="text-gray-400 text-sm mb-4">{event.description}</p>
+                        <div className="flex flex-wrap gap-4 text-sm text-gray-400">
+                          <span className="px-3 py-1 bg-zinc-700/50 rounded-full">Yes Votes: {event.yesVotes}</span>
+                          <span className="px-3 py-1 bg-zinc-700/50 rounded-full">No Votes: {event.noVotes}</span>
+                          <span className="px-3 py-1 bg-zinc-700/50 rounded-full">Created: {format(new Date(event.createdAt), 'PP')}</span>
                         </div>
-                        {/* Add vote distribution */}
-                        {hasEnded && (
-                          <div className="mt-2 text-sm">
-                            <span className="text-gray-400">
-                              Final Result: {event.outcome.toUpperCase()} won ({event.yesVotes} Yes vs {event.noVotes} No votes)
-                            </span>
-                          </div>
-                        )}
                       </div>
-                      <div className="flex gap-2">
-                        {!hasEnded && (
-                          <button
-                            onClick={() => handleUpdateVote(event)}
-                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium transition-colors"
-                          >
-                            Update Vote
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleEventClick(event._id)}
-                          className="px-4 py-2 bg-zinc-600 hover:bg-zinc-700 rounded-lg text-sm font-medium transition-colors"
-                        >
-                          View Details
-                        </button>
-                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteEvent(event._id);
+                        }}
+                        className="text-red-500 hover:text-red-400 transition-colors p-3 hover:bg-red-500/10 rounded-full"
+                        title="Delete Event"
+                      >
+                        <FaTrash />
+                      </button>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-700">
-          <h2 className="text-xl font-semibold mb-4">Account Actions</h2>
+        {/* Voted Events Section */}
+        <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-8 shadow-xl border border-zinc-700/30">
+          <div className="flex justify-between items-center mb-6">
+            <button className="text-3xl font-bold bg-white bg-clip-text text-transparent"
+            onClick={() => setShowVotedEvents(!showVotedEvents)}
+            >
+              My Voted Events
+            </button>
+            <button
+              onClick={() => setShowVotedEvents(!showVotedEvents)}
+              className="p-2 hover:bg-zinc-700/50 rounded-full transition-colors"
+            >
+              <FaChevronDown
+                className={`w-5 h-5 text-gray-400 transform transition-transform duration-300 ${
+                  showVotedEvents ? 'rotate-180' : ''
+                }`}
+              />
+            </button>
+          </div>
+          
+          <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
+            showVotedEvents ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}>
+            {votedEvents.length === 0 ? (
+              <div className="text-center py-8 bg-zinc-800/50 rounded-xl">
+                <p className="text-gray-400 text-lg">You haven't voted on any events yet.</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {votedEvents.map(event => {
+                  const hasEnded = event.status === 'ended';
+                  const userVotedYes = event.userVote.vote === 'yes';
+                  const yesWon = event.outcome === 'yes';
+                  const hasWon = hasEnded && ((userVotedYes && yesWon) || (!userVotedYes && !yesWon));
+                  
+                  return (
+                    <div 
+                      key={event._id} 
+                      className={`bg-zinc-800/50 rounded-xl p-6 hover:bg-zinc-700/50 transition-all duration-300 transform hover:scale-[1.02] ${
+                        hasEnded ? (hasWon ? 'border-2 border-green-500/50' : 'border-2 border-red-500/50') : 'border border-zinc-700/30'
+                      }`}
+                    >
+                      <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold mb-3">{event.question}</h3>
+                          <p className="text-gray-400 text-sm mb-4">{event.description}</p>
+                          <div className="flex flex-wrap gap-3 text-sm">
+                            <span className={`px-3 py-1 rounded-full ${event.userVote.vote === 'yes' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                              Voted: {event.userVote.vote.toUpperCase()}
+                            </span>
+                            <span className="px-3 py-1 bg-zinc-700/50 rounded-full text-gray-300">
+                              Quantity: {event.userVote.quantity}
+                            </span>
+                            <span className="px-3 py-1 bg-zinc-700/50 rounded-full text-gray-300">
+                              {format(new Date(event.userVote.timestamp), 'PP')}
+                            </span>
+                            <span className="px-3 py-1 bg-zinc-700/50 rounded-full text-gray-300">
+                              By: {event.createdBy?.username || 'Anonymous'}
+                            </span>
+                            {hasEnded ? (
+                              <span className={`px-3 py-1 rounded-full font-semibold ${hasWon ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                                {hasWon ? '🎉 Won!' : '😔 Lost'}
+                              </span>
+                            ) : (
+                              <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full font-semibold">
+                                🕒 In Progress
+                              </span>
+                            )}
+                          </div>
+                          {hasEnded && (
+                            <div className="mt-4 text-sm bg-zinc-700/30 p-3 rounded-lg">
+                              <span className="text-gray-300">
+                                Final Result: {event.outcome.toUpperCase()} won ({event.yesVotes} Yes vs {event.noVotes} No votes)
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex gap-3 w-full md:w-auto">
+                          {!hasEnded && (
+                            <button
+                              onClick={() => handleUpdateVote(event)}
+                              className="flex-1 md:flex-none px-6 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl text-sm font-medium transition-colors"
+                            >
+                              Update Vote
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleEventClick(event._id)}
+                            className="flex-1 md:flex-none px-6 py-2.5 bg-zinc-600 hover:bg-zinc-700 rounded-xl text-sm font-medium transition-colors"
+                          >
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-zinc-700/30">
+          <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">Account Actions</h2>
           <div className="flex gap-4">
             <button
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200"
+              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-xl transition duration-300 font-medium"
               onClick={() => setIsChangingPassword(true)}
             >
               Change Password
             </button>
             <button
-              className="px-4 py-2 rounded-lg transition duration-200 bg-blue-500 hover:bg-blue-600"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl transition duration-300 font-medium"
               onClick={() => setShowRechargeModal(true)}
             >
               Recharge
@@ -366,9 +424,9 @@ function Profile() {
 
         {/* Password Change Modal */}
         {isChangingPassword && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-            <div className="bg-zinc-900 rounded-lg p-6 w-full max-w-md">
-              <h2 className="text-2xl font-bold mb-4">Change Password</h2>
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-2xl p-8 w-full max-w-md border border-zinc-700/30">
+              <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">Change Password</h2>
               
               <div className="text-gray-300 mb-6">
                 Click the button below to receive a password reset link in your email.
@@ -377,13 +435,13 @@ function Profile() {
               <div className="flex gap-3">
                 <button
                   onClick={handlePasswordChange}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition duration-200"
+                  className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-3 rounded-xl transition duration-300 font-medium"
                 >
                   Send Reset Link
                 </button>
                 <button
                   onClick={() => setIsChangingPassword(false)}
-                  className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white py-2 rounded-lg transition duration-200"
+                  className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white py-3 rounded-xl transition duration-300 font-medium"
                 >
                   Cancel
                 </button>
@@ -394,10 +452,10 @@ function Profile() {
 
         {/* Voting Modal */}
         {showVoting && selectedEvent && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded-xl relative w-[90%] max-w-md">
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50">
+            <div className="bg-gradient-to-br from-zinc-900 to-zinc-800 p-8 rounded-2xl relative w-[90%] max-w-md border border-zinc-700/30">
               <button
-                className="absolute top-2 right-2 text-gray-700"
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
                 onClick={() => {
                   setShowVoting(false);
                   setSelectedEvent(null);
