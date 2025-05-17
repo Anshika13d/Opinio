@@ -164,7 +164,7 @@ export default function EventsList({selectedCategory}) {
           <div className="bg-white rounded-xl p-6 w-full max-w-md relative">
             <button
               onClick={() => {
-                setShowVoting(false);
+                // setShowVoting(false);
                 setSelectedEvent(null);
                 setActiveEventId(null);
               }}
