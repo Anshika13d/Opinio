@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await api.post("/auth/logout");
+      await api.post("/auth/logout", {}, {withCredentials: true});
       setUser(null);
       toast.success("Logged out successfully");
     } catch (err) {
