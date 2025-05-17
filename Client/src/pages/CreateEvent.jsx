@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -12,9 +12,28 @@ function CreateEvent() {
     quantity: 1
   });
   const [error, setError] = useState('');
+  
+  // Get current date and time in ISO format
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Adjust for timezone
+    return now.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Special validation for endingAt
+    if (name === 'endingAt') {
+      const selectedDate = new Date(value);
+      const currentDate = new Date();
+      
+      if (selectedDate <= currentDate) {
+        toast.error('Please select a future date and time');
+        return;
+      }
+    }
+    
     setFormData(prevState => ({
       ...prevState,
       [name]: value
@@ -23,11 +42,21 @@ function CreateEvent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Final validation before submission
+    const endingDate = new Date(formData.endingAt);
+    const currentDate = new Date();
+    
+    if (endingDate <= currentDate) {
+      setError('Event ending time must be in the future');
+      return;
+    }
+    
     try {
       const response = await axios.post('https://opinio-backend-pyno.onrender.com/events', formData, { withCredentials: true });
       if (response.data) {
         toast.success('Event created successfully');
-        navigate('/events'); // Navigate to home page or events list
+        navigate('/events');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
@@ -106,9 +135,13 @@ function CreateEvent() {
               name="endingAt"
               value={formData.endingAt}
               onChange={handleChange}
+              min={getCurrentDateTime()} // Set minimum date to current date and time
               required
               className="w-full px-3 py-2 bg-zinc-700 rounded-md focus:outline-none text-white"
             />
+            <p className="text-sm text-gray-400 mt-1">
+              Select a future date and time for the event to end
+            </p>
           </div>
 
           <div>
