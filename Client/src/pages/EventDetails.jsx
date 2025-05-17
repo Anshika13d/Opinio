@@ -110,7 +110,6 @@ function EventDetails() {
 
   const handleVoteComplete = (data) => {
     setEvent(data.event);
-    setShowVoting(false);
   };
 
   const handleAuthSuccess = () => {

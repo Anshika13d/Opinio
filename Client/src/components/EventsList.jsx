@@ -85,8 +85,6 @@ export default function EventsList({selectedCategory}) {
         event._id === data.event._id ? data.event : event
       )
     );
-    setShowVoting(false);
-    setSelectedEvent(null);
   };
 
   const handleAuthSuccess = () => {

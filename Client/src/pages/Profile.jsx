@@ -176,20 +176,14 @@ function Profile() {
     setShowVoting(true);
   };
 
-  const handleVoteUpdateComplete = async (data) => {
-    try {
-      // Refresh voted events list
-      const votedEventsResponse = await axios.get('https://opinio-backend-pyno.onrender.com/events/user/voted', {
-        withCredentials: true
-      });
-      // Filter out any null events (they might have been deleted)
-      const validVotedEvents = votedEventsResponse.data.filter(event => event !== null);
-      setVotedEvents(validVotedEvents);
-      setShowVoting(false);
-      setSelectedEvent(null);
-    } catch (err) {
-      console.error('Error refreshing voted events:', err);
-    }
+  const handleVoteUpdateComplete = (data) => {
+    // Update the event in the votedEvents list
+    setVotedEvents(prevEvents =>
+      prevEvents.map(event =>
+        event._id === data.event._id ? data.event : event
+      )
+    );
+    // Removed automatic closing of modal
   };
 
   const handleRechargeComplete = (newBalance) => {
