@@ -80,4 +80,4 @@ const VotingModal = ({ event, isOpen, onClose }) => {
   );
 };
 
-export default VotingModal; e
+export default VotingModal;
