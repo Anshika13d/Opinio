@@ -67,7 +67,7 @@ function Contact() {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm px-4 py-2"
+                  className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm px-4 py-2"
                   placeholder="Your name"
                 />
               </div>
@@ -83,7 +83,7 @@ function Contact() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm px-4 py-2"
+                  className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm px-4 py-2"
                   placeholder="your@email.com"
                 />
               </div>
@@ -100,7 +100,7 @@ function Contact() {
                 required
                 value={formData.subject}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm px-4 py-2"
+                className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm px-4 py-2"
                 placeholder="What's this about?"
               />
             </div>
@@ -116,7 +116,7 @@ function Contact() {
                 value={formData.message}
                 onChange={handleChange}
                 rows="6"
-                className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm px-4 py-2"
+                className="mt-1 block w-full rounded-lg bg-zinc-800 border-zinc-700 text-white shadow-sm focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm px-4 py-2"
                 placeholder="Your message here..."
               />
             </div>
@@ -127,7 +127,7 @@ function Contact() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className={`inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${
+                className={`inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-black hover:bg-zinc-950 focus:outline-none focus:ring-1 focus:ring-gray-500 ${
                   loading ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
@@ -158,7 +158,7 @@ function Contact() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span>Mumbai, India</span>
+              <span>Gwalior, India</span>
             </div>
           </div>
         </motion.div>
