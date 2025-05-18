@@ -26,8 +26,10 @@ export default function EventsList({selectedCategory}) {
     const fetchEvents = async () => {
       try {
         const response = await api.get('/events');
-        // Only show active events
-        const activeEvents = response.data.filter(event => event.status === 'active');
+        // Only show active events and filter out events that have passed their end time
+        const activeEvents = response.data.filter(event => 
+          event.status === 'active' && new Date(event.endingAt) > new Date()
+        );
         setEvents(activeEvents);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch events');
@@ -37,6 +39,9 @@ export default function EventsList({selectedCategory}) {
     };
 
     fetchEvents();
+
+    // Set up periodic refresh every 30 seconds
+    const refreshInterval = setInterval(fetchEvents, 30000);
 
     // Set up socket listener for real-time updates
     socket.on('eventEnded', (endedEventId) => {
@@ -63,6 +68,7 @@ export default function EventsList({selectedCategory}) {
     return () => {
       socket.off('eventEnded');
       socket.off('voteUpdated');
+      clearInterval(refreshInterval);
     };
   }, []);
 
