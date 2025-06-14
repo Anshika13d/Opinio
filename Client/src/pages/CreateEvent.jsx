@@ -16,8 +16,12 @@ function CreateEvent() {
   // Get current date and time in ISO format
   const getCurrentDateTime = () => {
     const now = new Date();
-    // Format: YYYY-MM-DDTHH:mm
-    return now.toISOString().slice(0, 16);
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
   const handleChange = (e) => {
@@ -57,7 +61,14 @@ function CreateEvent() {
     }
     
     try {
-      const response = await axios.post('https://opinio-backend-pyno.onrender.com/events', formData, { withCredentials: true });
+      // Convert the date to UTC before sending to server
+      const utcEndingAt = new Date(formData.endingAt).toISOString();
+      const eventData = {
+        ...formData,
+        endingAt: utcEndingAt
+      };
+      
+      const response = await axios.post('https://opinio-backend-pyno.onrender.com/events', eventData, { withCredentials: true });
       if (response.data) {
         toast.success('Event created successfully');
         navigate('/events');
