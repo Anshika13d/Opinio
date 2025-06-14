@@ -16,8 +16,8 @@ function CreateEvent() {
   // Get current date and time in ISO format
   const getCurrentDateTime = () => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset()); // Adjust for timezone
-    return now.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+    // Format: YYYY-MM-DDTHH:mm
+    return now.toISOString().slice(0, 16);
   };
 
   const handleChange = (e) => {
@@ -28,8 +28,11 @@ function CreateEvent() {
       const selectedDate = new Date(value);
       const currentDate = new Date();
       
-      if (selectedDate <= currentDate) {
-        toast.error('Please select a future date and time');
+      // Add 5 minutes to current date to allow for near-future times
+      const minimumDate = new Date(currentDate.getTime() + 5 * 60000);
+      
+      if (selectedDate <= minimumDate) {
+        toast.error('Please select a time at least 5 minutes in the future');
         return;
       }
     }
@@ -46,9 +49,10 @@ function CreateEvent() {
     // Final validation before submission
     const endingDate = new Date(formData.endingAt);
     const currentDate = new Date();
+    const minimumDate = new Date(currentDate.getTime() + 5 * 60000);
     
-    if (endingDate <= currentDate) {
-      setError('Event ending time must be in the future');
+    if (endingDate <= minimumDate) {
+      setError('Event ending time must be at least 5 minutes in the future');
       return;
     }
     
